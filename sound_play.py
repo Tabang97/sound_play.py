@@ -1,93 +1,45 @@
-from tkinter import*
+from tkinter import *
 import pygame
 from tkinter import filedialog
+root = Tk()
+root.title("mp3")
+root.geometry("500x300")
 
-window = Tk()
-window.title("Soundplay")
-window.geometry("400x400")
+#playlist box
+song_box = Listbox(root, bg="black", fg="green", width=60)
+song_box.pack(pady=20)
 
-pygame.mixer.init()
-
-#add song function
-def add_song():
-    song = filedialog.askopenfilename(initialdir='audio/', title="choose a song", filetypes=(("mp3 files", "*.mp3"), ))
-    song = song.replace("C:gui/audio/","")
-    song = song.replace(".mp3", "")
-    screen.insert(END, song)
-
-#play song function
-def play():
-    song = screen.get(ACTIVE)
-    song = f'C:/gui/audio/{song}.mp3'
-    pygame.mixer.music.load(song)
-    pygame.mixer.music.play(loops=0)
-
-#stop song function
-def stop():
-    pygame.mixer.music.stop()
-    screen.selection_clear(ACTIVE)
-
-global paused
-paused = FALSE
-#pause song
-def pause(is_paused):
-    global paused
-    paused = is_paused
-
-    if paused:
-        pygame.mixer.music.unpause()
-        paused = FALSE
-    else:
-        pygame.mixer.music.pause()
-        paused = True
-
-
-#create box
-screen = Listbox(window, bg="black", fg="green", width=60, selectbackground="gold")
-screen.pack(pady=20)
-
+#adding song funtion
+def add_songs():
+    song = filedialog.askopenfilename(initialdir='audio/', title="choose a song", filetypes=(("mp3 Files", "*mp3"),))
+    print(song)
+#control frame
+contrl_frame = Frame(root)
+contrl_frame.pack()
 
 #buttons
-back_btn = Button(window, text="Back", bg="red")
-back_btn.pack()
+prev_btn = Button(contrl_frame, text="prev", borderwidth=0, padx=10)
+prev_btn.grid(row=0, column=0)
 
-next_btn = Button(window, text="next",)
-next_btn.pack()
+play_btn = Button(contrl_frame, text="play", borderwidth=0, padx=10)
+play_btn.grid(row=0, column=1)
 
-play_btn = Button(window, text="play", command=play)
-play_btn.pack()
+pause_btn = Button(contrl_frame, text="pause", borderwidth=0, padx=10)
+pause_btn.grid(row=0, column=2)
 
-pause_btn = Button(window, text="pause", command=lambda: pause(paused))
-pause_btn.pack()
+stop_btn = Button(contrl_frame, text="stop", borderwidth=0, padx=10)
+stop_btn.grid(row=0, column=3)
 
-stop_btn = Button(window, text="stop", command=stop)
-stop_btn.pack()
+next_btn = Button(contrl_frame, text="next", borderwidth=0, padx=10)
+next_btn.grid(row=0, column=4)
 
-#create menu
-my_menu = Menu(window)
-window.config(menu=my_menu)
+#menu
+my_menu = Menu(root)
+root.config(menu=my_menu)
 
-#add song menu
-add_song_menu = Menu(my_menu)
-my_menu.add_cascade(label="add songs", menu=add_song_menu)
-add_song_menu.add_cascade(label="Add one song to playlist", command=add_song)
+#adding songs
+add_songs_menu = Menu(my_menu)
+my_menu.add_cascade(label="Add Songs",menu=add_songs_menu )
+add_songs_menu.add_command(label="Add one song to playlist", command=add_songs)
 
-
-
-
-#function play
-def play():
-    pygame.mixer.music.load("Lil Wayne - 6 Foot 7 Foot ft. Cory Gunz (Explicit) (Official Music Video).mp3")
-    pygame.mixer.music.play()
-
-#function stop
-def stop():
-    pygame.mixer.music.stop()
-
-
-
-window.mainloop()
-
-
-from playsound import playsound
-playsound("Lil Wayne - 6 Foot 7 Foot ft. Cory Gunz (Explicit) (Official Music Video).mp3")
+root.mainloop()
